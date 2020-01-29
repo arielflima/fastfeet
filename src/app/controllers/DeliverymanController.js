@@ -1,4 +1,5 @@
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
 class DeliverymanController {
   async store(req, res) {
@@ -10,7 +11,7 @@ class DeliverymanController {
 
     if (emailExists) {
       return res
-        .json('400')
+        .status('400')
         .json({ error: 'Email de entregador já cadastrado' });
     }
 
@@ -21,6 +22,20 @@ class DeliverymanController {
     });
 
     return res.json(deliveryman);
+  }
+
+  async index(req, res) {
+    const deliverymans = await Deliveryman.findAll({
+      attributes: ['id', 'name', 'email', 'avatar_id'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'path'],
+        },
+      ],
+    });
+    return res.json(deliverymans);
   }
 }
 
