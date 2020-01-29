@@ -36,6 +36,38 @@ class RecipientController {
       return res.status(400).json({ error: `${err}` });
     }
   }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      street: Yup.string(),
+      number: Yup.number(),
+      complement: Yup.string(),
+      state: Yup.string(),
+      city: Yup.string(),
+      postalcode: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res
+        .status(400)
+        .json({ error: 'Erro de validação UPDATE RECIPIENT CONTROLLER' });
+    }
+
+    const recipientToUpdate = await Recipient.findOne({
+      where: { name: req.body.name },
+    });
+
+    if (!recipientToUpdate) {
+      return res
+        .status(400)
+        .json({ error: 'Nome de destinatário não existe!' });
+    }
+
+    const updated = await recipientToUpdate.update(req.body);
+
+    return res.json(updated);
+  }
 }
 
 export default new RecipientController();
