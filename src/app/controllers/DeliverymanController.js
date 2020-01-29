@@ -1,8 +1,21 @@
+import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
 
 class DeliverymanController {
   async store(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string().email(),
+      avatar_id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res
+        .status(400)
+        .json({ error: 'Os campos não foram preenchidos corretamente! ' });
+    }
+
     const { name, email, avatar_id } = req.body;
 
     const emailExists = await Deliveryman.findOne({
@@ -36,6 +49,51 @@ class DeliverymanController {
       ],
     });
     return res.json(deliverymans);
+  }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      avatar_id: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res
+        .status(400)
+        .json({ error: 'Erro no preenchimento dos campos!' });
+    }
+
+    const deliveryman = await Deliveryman.findByPk(req.params.id);
+
+    if (!deliveryman) {
+      return res
+        .status(404)
+        .json({ error: 'Id de entregador não encontrado!' });
+    }
+
+    const deliverymanExists = await Deliveryman.findByPk(req.params.id, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'name', 'path'],
+        },
+      ],
+    });
+
+    const { name, email, avatar_id } = req.body;
+
+    const { avatar } = deliverymanExists;
+
+    const updated = await deliverymanExists.update({
+      name,
+      email,
+      avatar_id,
+      avatar,
+    });
+
+    return res.json(updated);
   }
 }
 
