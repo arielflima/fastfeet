@@ -47,6 +47,18 @@ class DeliveryController {
 
     return res.json(allDeliveries);
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const deliveryToDelete = await Delivery.findOne({
+      where: { id },
+    });
+
+    deliveryToDelete.destroy();
+
+    return res.json(await Delivery.findAll());
+  }
 }
 
 export default new DeliveryController();
