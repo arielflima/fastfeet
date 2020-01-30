@@ -8,7 +8,11 @@ class DeliveryStatusController {
       where: { deliveryman_id: id },
     });
 
-    return res.json(deliveriesToDeliveryman);
+    const validDeliveries = deliveriesToDeliveryman.filter(
+      delivery => !(delivery.end_date !== null || delivery.canceled_at !== null)
+    );
+
+    return res.json(validDeliveries);
   }
 }
 
