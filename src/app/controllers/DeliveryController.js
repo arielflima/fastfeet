@@ -7,7 +7,7 @@ class DeliveryController {
       recipient_id: Yup.number().required(),
       deliveryman_id: Yup.number().required(),
       signature_id: Yup.string(),
-      product: Yup.string(),
+      product: Yup.string().required(),
       canceled_at: Yup.date(),
       start_date: Yup.date(),
       end_date: Yup.date(),
@@ -40,6 +40,12 @@ class DeliveryController {
     });
 
     return res.json(delivery);
+  }
+
+  async index(req, res) {
+    const allDeliveries = await Delivery.findAll();
+
+    return res.json(allDeliveries);
   }
 }
 
