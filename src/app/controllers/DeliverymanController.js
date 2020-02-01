@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import Deliveryman from '../models/Deliveryman';
+import Delivery from '../models/Delivery';
 import File from '../models/File';
 
 class DeliverymanController {
@@ -38,17 +39,30 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const deliverymans = await Deliveryman.findAll({
-      attributes: ['id', 'name', 'email', 'avatar_id'],
-      include: [
-        {
-          model: File,
-          as: 'avatar',
-          attributes: ['name', 'path'],
-        },
-      ],
+    const { id } = req.params;
+    if (!id) {
+      const deliverymans = await Deliveryman.findAll({
+        attributes: ['id', 'name', 'email', 'avatar_id'],
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['name', 'path'],
+          },
+        ],
+      });
+      return res.json(deliverymans);
+    }
+
+    const deliveries = await Delivery.findAll({
+      where: { deliveryman_id: id },
     });
-    return res.json(deliverymans);
+
+    const deliveriesDone = deliveries.filter(
+      delivery => delivery.end_date !== null
+    );
+
+    return res.json(deliveriesDone);
   }
 
   async update(req, res) {
