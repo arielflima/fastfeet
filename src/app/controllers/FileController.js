@@ -11,6 +11,12 @@ class FileController {
 
     return res.json(file);
   }
+
+  async index(req, res) {
+    const list = await File.findAll();
+
+    res.json(list);
+  }
 }
 
 export default new FileController();

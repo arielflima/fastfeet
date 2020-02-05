@@ -9,7 +9,8 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import DeliveryController from './app/controllers/DeliveryController';
 import DeliveryStatusController from './app/controllers/DeliveryStatusController';
 import DeliveryCheckInController from './app/controllers/DeliveryCheckInController';
-// import DeliveryCheckOutController from './app/controllers/DeliveryCheckOutController';
+import DeliveryCheckOutController from './app/controllers/DeliveryCheckOutController';
+import DeliveryProblem from './app/controllers/DeliveryProblemController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -27,6 +28,7 @@ routes.put('/recipients', RecipientController.update);
 
 // All files
 routes.post('/files', upload.single('file'), FileController.store);
+routes.get('/files', FileController.index);
 
 // Deliverymans controller
 routes.post('/deliverymans', DeliverymanController.store);
@@ -49,6 +51,10 @@ routes.post('/delivery/checkin/:id', DeliveryCheckInController.store);
 // routes.get('/deliverymans/:id/deliveries', DeliveryCheckInController.index);
 
 // CheckOut
-// routes.post('/delivery/checkout/:id', DeliveryCheckOutController.store);
+routes.post('/delivery/checkout/:id', DeliveryCheckOutController.store);
+
+// Deliveries problems
+routes.post('/delivery/problem/:id', DeliveryProblem.store);
+routes.get('/delivery/problem/:id', DeliveryProblem.index);
 
 export default routes;

@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import isAfter from 'date-fns/isAfter';
+import parseISO from 'date-fns/parseISO';
 import Delivery from '../models/Delivery';
 import File from '../models/File';
 
@@ -38,11 +39,18 @@ class DeliveryCheckOutController {
       return res.status(400).json({ error: 'Id de assinatura inexistente!' });
     }
 
-    if (!isAfter(delivery.start_date, end_date)) {
+    if (isAfter(delivery.start_date, parseISO(end_date))) {
       return res.status(400).json({
         error: 'Data de checkOut deve ser posterior à data de CheckIn',
       });
     }
+
+    const updated = await delivery.update({
+      end_date,
+      signature_id,
+    });
+
+    return res.json(updated);
   }
 }
 
