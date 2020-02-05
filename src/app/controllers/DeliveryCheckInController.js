@@ -1,5 +1,10 @@
 import * as Yup from 'yup';
 import isToday from 'date-fns/isToday';
+import isAfter from 'date-fns/isAfter';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
+import setSeconds from 'date-fns/setSeconds';
+import parseISO from 'date-fns/parseISO';
 import Delivery from '../models/Delivery';
 
 class DeliveryCheckInController {
@@ -43,6 +48,14 @@ class DeliveryCheckInController {
     }
 
     const { start_date } = req.body;
+
+    const today = setSeconds(setMinutes(setHours(new Date(), 18), 0), 0);
+
+    if (!isAfter(today, parseISO(start_date))) {
+      return res
+        .status(400)
+        .json({ error: 'O checkIn deve ser realizado antes das 18:00h' });
+    }
 
     const updated = await delivery.update({
       start_date,
