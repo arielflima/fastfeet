@@ -55,16 +55,6 @@ class DeliveryProblemController {
   }
 
   async delete(req, res) {
-    const schema = Yup.object().shape({
-      canceled_at: Yup.date().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res
-        .status(400)
-        .json({ error: 'Erro no preenchimento de campo canceled_at' });
-    }
-
     const problemId = req.params.id;
 
     const problem = await DeliveryProblem.findByPk(problemId);
@@ -77,10 +67,10 @@ class DeliveryProblemController {
 
     const deliveryToCancel = await Delivery.findByPk(DeliveryId);
 
-    const dateCancel = req.body.canceled_at;
+    const canceled_at = new Date();
 
     const canceled = await deliveryToCancel.update({
-      canceled_at: dateCancel,
+      canceled_at,
     });
 
     return res.json(canceled);
