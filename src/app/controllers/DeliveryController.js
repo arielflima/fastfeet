@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
+import Mail from '../../lib/Mail';
+import Deliveryman from '../models/Deliveryman';
 
 class DeliveryController {
   async store(req, res) {
@@ -37,6 +39,18 @@ class DeliveryController {
       canceled_at,
       start_date,
       end_date,
+    });
+
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: 'Nova entrega para você',
+      template: 'newDelivery',
+      context: {
+        deliveryman: deliveryman.name,
+        deliveryId: delivery.id,
+      },
     });
 
     return res.json(delivery);
