@@ -53,6 +53,38 @@ class DeliveryProblemController {
 
     return res.json(deliveries);
   }
+
+  async delete(req, res) {
+    const schema = Yup.object().shape({
+      canceled_at: Yup.date().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res
+        .status(400)
+        .json({ error: 'Erro no preenchimento de campo canceled_at' });
+    }
+
+    const problemId = req.params.id;
+
+    const problem = await DeliveryProblem.findByPk(problemId);
+
+    if (!problem) {
+      return res.status(400).json({ error: 'Id de problema inexistente!' });
+    }
+
+    const DeliveryId = problem.delivery_id;
+
+    const deliveryToCancel = await Delivery.findByPk(DeliveryId);
+
+    const dateCancel = req.body.canceled_at;
+
+    const canceled = await deliveryToCancel.update({
+      canceled_at: dateCancel,
+    });
+
+    return res.json(canceled);
+  }
 }
 
 export default new DeliveryProblemController();

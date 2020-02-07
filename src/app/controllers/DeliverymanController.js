@@ -39,30 +39,17 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const { id } = req.params;
-    if (!id) {
-      const deliverymans = await Deliveryman.findAll({
-        attributes: ['id', 'name', 'email', 'avatar_id'],
-        include: [
-          {
-            model: File,
-            as: 'avatar',
-            attributes: ['name', 'path'],
-          },
-        ],
-      });
-      return res.json(deliverymans);
-    }
-
-    const deliveries = await Delivery.findAll({
-      where: { deliveryman_id: id },
+    const deliverymans = await Deliveryman.findAll({
+      attributes: ['id', 'name', 'email', 'avatar_id'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'path'],
+        },
+      ],
     });
-
-    const deliveriesDone = deliveries.filter(
-      delivery => delivery.end_date !== null
-    );
-
-    return res.json(deliveriesDone);
+    return res.json(deliverymans);
   }
 
   async update(req, res) {

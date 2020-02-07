@@ -55,5 +55,6 @@ routes.post('/delivery/:id/checkout', DeliveryCheckOutController.store);
 // Delivery problems
 routes.post('/delivery/:id/problem', DeliveryProblem.store);
 routes.get('/delivery/:id/problem', DeliveryProblem.index);
+routes.delete('/problem/:id/cancel-delivery', DeliveryProblem.delete);
 
 export default routes;
