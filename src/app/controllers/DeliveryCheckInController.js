@@ -1,10 +1,13 @@
 import * as Yup from 'yup';
-import isToday from 'date-fns/isToday';
-import isAfter from 'date-fns/isAfter';
-import setHours from 'date-fns/setHours';
-import setMinutes from 'date-fns/setMinutes';
-import setSeconds from 'date-fns/setSeconds';
-import parseISO from 'date-fns/parseISO';
+import sequelize from 'sequelize';
+import {
+  isToday,
+  isAfter,
+  setHours,
+  setMinutes,
+  setSeconds,
+  parseISO,
+} from 'date-fns';
 import Delivery from '../models/Delivery';
 
 class DeliveryCheckInController {
@@ -62,6 +65,27 @@ class DeliveryCheckInController {
     });
 
     return res.json(updated);
+  }
+
+  async index(req, res) {
+    const { id } = req.params;
+
+    const deliveries = await Delivery.findAll({
+      where: {
+        deliveryman_id: id,
+        end_date: {
+          [sequelize.Op.ne]: null,
+        },
+      },
+    });
+
+    if (deliveries.length < 1) {
+      return res
+        .status(400)
+        .json({ error: 'Nenhuma entrega para esse Id de entregador' });
+    }
+
+    return res.json(deliveries);
   }
 }
 

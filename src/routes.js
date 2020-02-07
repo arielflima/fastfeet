@@ -33,7 +33,6 @@ routes.get('/files', FileController.index);
 // Deliverymans controller
 routes.post('/deliverymans', DeliverymanController.store);
 routes.get('/deliverymans', DeliverymanController.index);
-// routes.get('/deliverymans/:id/deliveries', DeliverymanController.index); // REFATORAR PARA DELIVERY CHECK IN CONTROLLER
 routes.put('/deliverymans/:id', DeliverymanController.update);
 routes.delete('/deliverymans/:id', DeliverymanController.delete);
 
@@ -47,14 +46,14 @@ routes.get('/deliverystatus/:id', DeliveryStatusController.index);
 // routes.post('/deliverystatus/check/:id', DeliveryStatusController.store); // REFATORAR PARA DELIVERY CKECK IN/OUT CONTROLLERS
 
 // CheckIn
-routes.post('/delivery/checkin/:id', DeliveryCheckInController.store);
-// routes.get('/deliverymans/:id/deliveries', DeliveryCheckInController.index);
+routes.post('/delivery/:id/checkin', DeliveryCheckInController.store);
+routes.get('/deliveryman/:id/deliveriesdone', DeliveryCheckInController.index);
 
 // CheckOut
-routes.post('/delivery/checkout/:id', DeliveryCheckOutController.store);
+routes.post('/delivery/:id/checkout', DeliveryCheckOutController.store);
 
-// Deliveries problems
-routes.post('/delivery/problem/:id', DeliveryProblem.store);
-routes.get('/delivery/problem/:id', DeliveryProblem.index);
+// Delivery problems
+routes.post('/delivery/:id/problem', DeliveryProblem.store);
+routes.get('/delivery/:id/problem', DeliveryProblem.index);
 
 export default routes;
