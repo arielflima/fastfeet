@@ -30,11 +30,11 @@ routes.put('/recipients', RecipientController.update);
 routes.post('/files', upload.single('file'), FileController.store);
 routes.get('/files', FileController.index);
 
-// Deliverymans controller
-routes.post('/deliverymans', DeliverymanController.store);
-routes.get('/deliverymans', DeliverymanController.index);
-routes.put('/deliverymans/:id', DeliverymanController.update);
-routes.delete('/deliverymans/:id', DeliverymanController.delete);
+// Deliverymen controller
+routes.post('/deliveryman', DeliverymanController.store);
+routes.get('/deliveryman', DeliverymanController.index);
+routes.put('/deliveryman/:id', DeliverymanController.update);
+routes.delete('/deliveryman/:id', DeliverymanController.delete);
 
 // Deliveries controller
 routes.post('/delivery', DeliveryController.store);

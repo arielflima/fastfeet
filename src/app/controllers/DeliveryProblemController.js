@@ -1,6 +1,9 @@
 import * as Yup from 'yup';
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
+import Deliveryman from '../models/Deliveryman';
+import Queue from '../../lib/Queue';
+import DeliveryCancelMail from '../jobs/DeliveryCancelMail';
 
 class DeliveryProblemController {
   async store(req, res) {
@@ -65,12 +68,22 @@ class DeliveryProblemController {
 
     const DeliveryId = problem.delivery_id;
 
-    const deliveryToCancel = await Delivery.findByPk(DeliveryId);
+    const delivery = await Delivery.findByPk(DeliveryId);
 
     const canceled_at = new Date();
 
-    const canceled = await deliveryToCancel.update({
+    const canceled = await delivery.update({
       canceled_at,
+    });
+
+    const { deliveryman_id } = delivery;
+
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+
+    await Queue.add(DeliveryCancelMail.key, {
+      delivery,
+      deliveryman,
+      problem,
     });
 
     return res.json(canceled);
