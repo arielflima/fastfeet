@@ -24,6 +24,7 @@ routes.use(authMiddleware);
 
 // Destinations
 routes.post('/recipients', RecipientController.store);
+routes.get('/recipients', RecipientController.index);
 routes.put('/recipients', RecipientController.update);
 
 // All files

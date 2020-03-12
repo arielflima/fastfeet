@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 
+import sequelize from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
@@ -67,6 +68,26 @@ class RecipientController {
     const updated = await recipientToUpdate.update(req.body);
 
     return res.json(updated);
+  }
+
+  async index(req, res) {
+    const name = req.query.q;
+
+    if (name) {
+      const nameFiltered = await Recipient.findAll({
+        where: {
+          name: {
+            [sequelize.Op.like]: `%${name}%`,
+          },
+        },
+      });
+
+      return res.json(nameFiltered);
+    }
+
+    const allRecipients = await Recipient.findAll();
+
+    return res.json(allRecipients);
   }
 }
 
