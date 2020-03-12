@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import sequelize from 'sequelize';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Queue from '../../lib/Queue';
@@ -53,6 +54,20 @@ class DeliveryController {
   }
 
   async index(req, res) {
+    const product = req.query.q;
+
+    if (product) {
+      const productFiltered = await Delivery.findAll({
+        where: {
+          product: {
+            [sequelize.Op.like]: `%${product}%`,
+          },
+        },
+      });
+
+      return res.json(productFiltered);
+    }
+
     const allDeliveries = await Delivery.findAll();
 
     return res.json(allDeliveries);
