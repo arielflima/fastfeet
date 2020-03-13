@@ -20,7 +20,7 @@ class Delivery extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.File, {
+    this.belongsTo(models.Recipient, {
       foreignKey: 'recipient_id',
       as: 'recipient',
     });

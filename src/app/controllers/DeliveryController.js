@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import sequelize from 'sequelize';
 import Delivery from '../models/Delivery';
+import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 import Queue from '../../lib/Queue';
 import NewDeliveryMail from '../jobs/NewDeliveryMail';
@@ -68,7 +69,23 @@ class DeliveryController {
       return res.json(productFiltered);
     }
 
-    const allDeliveries = await Delivery.findAll();
+    const allDeliveries = await Delivery.findAll({
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: [
+            'name',
+            'street',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'postalcode',
+          ],
+        },
+      ],
+    });
 
     return res.json(allDeliveries);
   }
