@@ -3,6 +3,7 @@ import sequelize from 'sequelize';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 import Queue from '../../lib/Queue';
 import NewDeliveryMail from '../jobs/NewDeliveryMail';
 
@@ -89,6 +90,13 @@ class DeliveryController {
           model: Deliveryman,
           as: 'deliveryman',
           attributes: ['name', 'email', 'avatar_id'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['name', 'path'],
+            },
+          ],
         },
       ],
       order: ['id'],
