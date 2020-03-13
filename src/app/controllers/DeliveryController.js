@@ -56,6 +56,7 @@ class DeliveryController {
 
   async index(req, res) {
     const product = req.query.q;
+    const { page = 1 } = req.query;
 
     if (product) {
       const productFiltered = await Delivery.findAll({
@@ -90,6 +91,9 @@ class DeliveryController {
           attributes: ['name', 'email', 'avatar_id'],
         },
       ],
+      order: ['id'],
+      limit: 6,
+      offset: (page - 1) * 6,
     });
 
     return res.json(allDeliveries);
