@@ -84,6 +84,11 @@ class DeliveryController {
             'postalcode',
           ],
         },
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name', 'email', 'avatar_id'],
+        },
       ],
     });
 
