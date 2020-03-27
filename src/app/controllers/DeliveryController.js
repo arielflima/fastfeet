@@ -43,6 +43,7 @@ class DeliveryController {
       canceled_at,
       start_date,
       end_date,
+      status: 'PENDENTE',
     });
 
     const deliveryman = await Deliveryman.findByPk(deliveryman_id);

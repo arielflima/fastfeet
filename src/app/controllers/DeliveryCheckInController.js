@@ -62,6 +62,7 @@ class DeliveryCheckInController {
 
     const updated = await delivery.update({
       start_date,
+      status: 'RETIRADA',
     });
 
     return res.json(updated);

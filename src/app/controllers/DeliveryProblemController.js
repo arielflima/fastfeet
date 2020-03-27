@@ -74,6 +74,7 @@ class DeliveryProblemController {
 
     const canceled = await delivery.update({
       canceled_at,
+      status: 'CANCELADO',
     });
 
     const { deliveryman_id } = delivery;

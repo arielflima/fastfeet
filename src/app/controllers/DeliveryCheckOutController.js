@@ -48,6 +48,7 @@ class DeliveryCheckOutController {
     const updated = await delivery.update({
       end_date,
       signature_id,
+      status: 'ENTREGUE',
     });
 
     return res.json(updated);
