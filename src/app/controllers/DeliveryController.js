@@ -57,8 +57,15 @@ class DeliveryController {
   }
 
   async index(req, res) {
+    const { id } = req.params;
     const product = req.query.q;
     const { page = 1 } = req.query;
+
+    if (id) {
+      const productById = await Delivery.findByPk(id);
+
+      return res.json(productById);
+    }
 
     if (product) {
       const productFiltered = await Delivery.findAll({
@@ -115,7 +122,7 @@ class DeliveryController {
 
     deliveryToDelete.destroy();
 
-    return res.json(await Delivery.findAll());
+    return res.json(`Entrega ID: ${id} removida com sucesso!`);
   }
 
   async update(req, res) {

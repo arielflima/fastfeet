@@ -40,6 +40,7 @@ routes.delete('/deliveryman/:id', DeliverymanController.delete);
 // Deliveries controller
 routes.post('/delivery', DeliveryController.store);
 routes.get('/delivery', DeliveryController.index);
+routes.get('/delivery/:id', DeliveryController.index);
 routes.delete('/delivery/:id', DeliveryController.delete);
 routes.put('/delivery/:id', DeliveryController.update);
 
