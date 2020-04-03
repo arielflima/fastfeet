@@ -62,7 +62,38 @@ class DeliveryController {
     const { page = 1 } = req.query;
 
     if (id) {
-      const productById = await Delivery.findByPk(id);
+      const productById = await Delivery.findByPk(id, {
+        include: [
+          {
+            model: Recipient,
+            as: 'recipient',
+            attributes: [
+              'name',
+              'street',
+              'number',
+              'complement',
+              'state',
+              'city',
+              'postalcode',
+            ],
+          },
+          {
+            model: Deliveryman,
+            as: 'deliveryman',
+            attributes: ['name', 'email', 'avatar_id'],
+            include: [
+              {
+                model: File,
+                as: 'avatar',
+                attributes: ['name', 'path'],
+              },
+            ],
+          },
+        ],
+        order: ['id'],
+        limit: 6,
+        offset: (page - 1) * 6,
+      });
 
       return res.json(productById);
     }
